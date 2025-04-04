@@ -1,21 +1,23 @@
-const AddThreadUseCase = require('../../../../Applications/use_case/AddThreadUseCase');
+const AddCommentUseCase = require('../../../../Applications/use_case/AddCommentUseCase');
 const DomainErrorTranslator = require("../../../../Commons/exceptions/DomainErrorTranslator");
 const ClientError = require("../../../../Commons/exceptions/ClientError");
 
-class ThreadsHandler {
+class CommentsHandler {
   constructor(container) {
     this._container = container;
 
-    this.postThreadHandler = this.postThreadHandler.bind(this);
+    this.postCommentHandler = this.postCommentHandler.bind(this);
   }
 
-  async postThreadHandler(request, h) {
+  async postCommentHandler(request, h) {
     try {
-      const addThreadUseCase = this._container.getInstance(AddThreadUseCase.name);
+      const addCommentUseCase = this._container.getInstance(AddCommentUseCase.name);
       const { id: credentialId } = request.auth.credentials;
-      const addedThread = await addThreadUseCase.execute(
+      const { threadId } = request.params;
+      const addedComment = await addCommentUseCase.execute(
         {
           ...request.payload,
+          thread: threadId,
           owner: credentialId,
         }
       );
@@ -23,7 +25,7 @@ class ThreadsHandler {
       const response = h.response({
         status: 'success',
         data: {
-          addedThread,
+          addedComment,
         },
       });
       response.code(201);
@@ -43,4 +45,4 @@ class ThreadsHandler {
   }
 }
 
-module.exports = ThreadsHandler;
+module.exports = CommentsHandler;
