@@ -8,6 +8,7 @@ class CommentsHandler {
     this._container = container;
 
     this.postCommentHandler = this.postCommentHandler.bind(this);
+    this.deleteCommentHandler = this.deleteCommentHandler.bind(this);
   }
 
   async postCommentHandler(request, h) {
@@ -46,36 +47,23 @@ class CommentsHandler {
   }
 
   async deleteCommentHandler(request, h) {
-    try {
-      const deleteCommentUseCase = this._container.getInstance(DeleteCommentUseCase.name);
-      const { id: credentialId } = request.auth.credentials;
-      const { threadId, commentId } = request.params;
+    const deleteCommentUseCase = this._container.getInstance(DeleteCommentUseCase.name);
+    const { id: credentialId } = request.auth.credentials;
+    const { threadId, commentId } = request.params;
 
-      await deleteCommentUseCase.execute(
-        {
-          thread: threadId,
-          owner: credentialId,
-          id: commentId,
-        }
-      );
-
-      const response = h.response({
-        status: 'success',
-      });
-      response.code(200);
-      return response;
-    } catch (error) {
-      const translatedError = DomainErrorTranslator.translate(error);
-
-      if (translatedError instanceof ClientError) {
-        const response = h.response({
-          status: 'fail',
-          message: translatedError.message,
-        });
-        response.code(translatedError.statusCode);
-        return response;
+    await deleteCommentUseCase.execute(
+      {
+        thread: threadId,
+        owner: credentialId,
+        id: commentId,
       }
-    }
+    );
+
+    const response = h.response({
+      status: 'success',
+    });
+    response.code(200);
+    return response;
   }
 }
 

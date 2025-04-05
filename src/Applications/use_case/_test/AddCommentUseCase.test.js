@@ -9,6 +9,8 @@ describe('AddCommentUseCase', () => {
     // Arrange
     const useCasePayload = {
       content: 'thread ini bagus',
+      thread: 'thread-1',
+      owner: 'user-1',
     };
     const mockAddedComment = new AddedComment({
       id: 'comment-1',
@@ -44,7 +46,10 @@ describe('AddCommentUseCase', () => {
 
     expect(mockThreadRepository.verifyAvailableThread).toBeCalledWith(useCasePayload.thread);
     expect(mockCommentRepository.addComment).toBeCalledWith(new AddComment({
-      content: useCasePayload.content,
-    }));
+        content: useCasePayload.content,
+        thread: useCasePayload.thread,
+        owner: useCasePayload.owner,
+      }),
+      useCasePayload.owner, useCasePayload.thread);
   });
 });

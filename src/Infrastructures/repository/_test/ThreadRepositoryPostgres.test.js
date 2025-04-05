@@ -23,11 +23,12 @@ describe('ThreadRepositoryPostgres', () => {
         title: 'alpha',
         body: 'body',
       });
+      const owner = 'user-1';
       const fakeIdGenerator = () => '1';
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
-      await threadRepositoryPostgres.addThread(addThread);
+      await threadRepositoryPostgres.addThread(addThread, owner);
 
       // Assert
       const threads = await ThreadsTableTestHelper.findThreadsById('thread-1');
@@ -40,11 +41,12 @@ describe('ThreadRepositoryPostgres', () => {
         title: 'alpha',
         body: 'body',
       });
+      const owner = 'user-1';
       const fakeIdGenerator = () => '1'; // stub!
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
-      const addedThread = await threadRepositoryPostgres.addThread(addThread);
+      const addedThread = await threadRepositoryPostgres.addThread(addThread, owner);
 
       // Assert
       expect(addedThread).toStrictEqual(new AddedThread({
@@ -73,5 +75,36 @@ describe('ThreadRepositoryPostgres', () => {
       // Action & Assert
       await expect(threadRepositoryPostgres.verifyAvailableThread('thread-1')).rejects.toThrowError(NotFoundError);
     });
-  })
+  });
+
+  describe('getDetailThread function', () => {
+    it('should return thread correctly', async () => {
+      // Arrange: insert user dulu
+      await UsersTableTestHelper.addUser({
+        id: 'user-1',
+        username: 'dicoding',
+      });
+
+      // Baru insert thread yang owner-nya user-1
+      await ThreadsTableTestHelper.addThread({
+        id: 'thread-1',
+        title: 'alpha',
+        body: 'body',
+        owner: 'user-1',
+      });
+
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
+
+      // Act
+      const getDetailThread = await threadRepositoryPostgres.getDetailThread('thread-1');
+
+      // Assert
+      expect(getDetailThread.id).toEqual('thread-1');
+      expect(getDetailThread.title).toEqual('alpha');
+      expect(getDetailThread.body).toEqual('body');
+      expect(getDetailThread.username).toEqual('dicoding');
+      expect(getDetailThread).toHaveProperty('date');
+      expect(getDetailThread.comments).toEqual([]);
+    });
+  });
 });

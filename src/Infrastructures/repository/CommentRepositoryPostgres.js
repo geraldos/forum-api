@@ -10,15 +10,14 @@ class CommentRepositoryPostgres extends CommentRepository {
     this._idGenerator = idGenerator;
   }
 
-  async addComment(addComment, owner) {
+  async addComment(addComment, owner, threadId) {
     const { content } = addComment;
-
     const id = `comment-${this._idGenerator()}`;
     const date = new Date();
 
     const query = {
-      text: 'INSERT INTO comments(id, content, owner, date) VALUES($1, $2, $3, $4) RETURNING id, content, owner, date',
-      values: [id, content, owner, date],
+      text: 'INSERT INTO comments(id, thread_id, content, owner, date) VALUES($1, $2, $3, $4, $5) RETURNING id, thread_id, content, owner, date',
+      values: [id, threadId, content, owner, date],
     };
 
     const result = await this._pool.query(query);
@@ -55,6 +54,24 @@ class CommentRepositoryPostgres extends CommentRepository {
     if (!result.rowCount) {
       throw new AuthorizationError('This comment is not yours')
     };
+  }
+
+  async getCommentByThreadId (commentId) {
+    const query = {
+      text: `SELECT
+                 comments.id,
+                 users.username,
+                 comments.date,
+                 comments.content,
+                 comments.is_delete
+             FROM comments
+                      JOIN users ON users.id = comments.owner
+             WHERE comments.thread_id = $1
+             ORDER BY comments.date ASC;`,
+      values: [commentId]
+    }
+    const result = await this._pool.query(query);
+    return result.rows;
   }
 }
 

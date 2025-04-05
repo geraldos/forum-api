@@ -9,6 +9,7 @@ describe('AddThreadUseCase', () => {
     const useCasePayload = {
       title: 'alpha',
       body: 'body',
+      owner: 'user-1',
     };
     const mockAddedThread = new AddedThread({
       id: 'thread-1',
@@ -40,6 +41,6 @@ describe('AddThreadUseCase', () => {
     expect(mockThreadRepository.addThread).toBeCalledWith(new AddThread({
       title: useCasePayload.title,
       body: useCasePayload.body,
-    }));
+    }), useCasePayload.owner);
   });
 });

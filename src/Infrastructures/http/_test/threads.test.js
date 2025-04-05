@@ -2,6 +2,7 @@ const pool = require('../../database/postgres/pool');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const AuthenticationsTableTestHelper = require('../../../../tests/AuthenticationsTableTestHelper');
+const CommentsTableTestHelper = require('../../../../tests/CommentsTableHelper');
 const container = require('../../container');
 const createServer = require('../createServer');
 
@@ -145,6 +146,63 @@ describe('/threads endpoint', () => {
       expect(response.statusCode).toEqual(400);
       expect(responseJson.status).toEqual('fail');
       expect(responseJson.message).toEqual('tidak dapat membuat thread baru karena karakter body melebihi batas limit');
+    });
+  });
+
+  describe('when GET /threads/{threadId}', () => {
+    it('should response 200 and return detail thread with comments', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-1', username: 'dicoding' });
+      await ThreadsTableTestHelper.addThread({
+        id: 'thread-1',
+        title: 'alpha',
+        body: 'body',
+        owner: 'user-1',
+      });
+      await CommentsTableTestHelper.addComment({
+        id: 'comment-1',
+        threadId: 'thread-1',
+        content: 'thread ini bagus',
+        owner: 'user-1',
+      });
+      const threadId = 'thread-1';
+      const server = await createServer(container);
+
+      // Action
+      const response = await server.inject({
+        method: 'GET',
+        url: `/threads/${threadId}`,
+      });
+
+      // Assert
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(200);
+      expect(responseJson.status).toEqual('success');
+
+      const thread = responseJson.data.thread;
+      expect(thread.id).toEqual('thread-1');
+      expect(thread.title).toEqual('alpha');
+      expect(thread.body).toEqual('body');
+      expect(thread.username).toEqual('dicoding');
+      expect(Array.isArray(thread.comments)).toBe(true);
+      expect(thread.comments[0].content).toEqual('thread ini bagus');
+    });
+
+    it('should response 404 when thread is not found', async () => {
+      // Arrange
+      const server = await createServer(container);
+
+      // Action
+      const response = await server.inject({
+        method: 'GET',
+        url: '/threads/non-existent-thread',
+      });
+
+      // Assert
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(404);
+      expect(responseJson.status).toEqual('fail');
+      expect(responseJson.message).toEqual('Thread tidak ditemukan');
     });
   });
 });
