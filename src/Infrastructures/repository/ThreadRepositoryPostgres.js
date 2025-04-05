@@ -29,10 +29,11 @@ class ThreadRepositoryPostgres extends ThreadRepository {
       text: 'SELECT * FROM threads WHERE id = $1',
       values: [threadId]
     }
-    const result = await this._pool.query(query)
+    const result = await this._pool.query(query);
+
     if (!result.rowCount) {
       throw new NotFoundError('Thread not found');
-    }
+    };
   }
 }
 

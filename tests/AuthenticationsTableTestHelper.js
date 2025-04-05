@@ -26,7 +26,7 @@ const AuthenticationsTableTestHelper = {
     const payload = {
       username,
       password: 'secret',
-    }
+    };
 
     const response = await server.inject({
       method: 'POST',
@@ -34,24 +34,24 @@ const AuthenticationsTableTestHelper = {
       payload: {
         ...payload,
         fullname: 'Dicoding Indonesia'
-      }
-    })
+      },
+    });
 
     const responseAuthentication = await server.inject({
       method: 'POST',
       url: '/authentications',
       payload: {
         ...payload
-      }
-    })
+      },
+    });
 
-    const { id } = JSON.parse(response.payload).data.addedUser
-    const { accessToken } = JSON.parse(responseAuthentication.payload).data
+    const { id } = JSON.parse(response.payload).data.addedUser;
+    const { accessToken } = JSON.parse(responseAuthentication.payload).data;
 
     return {
       id,
-      accessToken
-    }
+      accessToken,
+    };
   },
 
   async cleanTable() {

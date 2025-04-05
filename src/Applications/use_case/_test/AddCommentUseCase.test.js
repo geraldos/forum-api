@@ -41,6 +41,8 @@ describe('AddCommentUseCase', () => {
       content: useCasePayload.content,
       owner: 'user-1',
     }));
+
+    expect(mockThreadRepository.verifyAvailableThread).toBeCalledWith(useCasePayload.thread);
     expect(mockCommentRepository.addComment).toBeCalledWith(new AddComment({
       content: useCasePayload.content,
     }));

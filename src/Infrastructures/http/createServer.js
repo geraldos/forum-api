@@ -14,14 +14,14 @@ const createServer = async (container) => {
     routes: {
       cors: {
         origin: ['*']
-      }
-    }
+      },
+    },
   });
 
   await server.register([
     {
-      plugin: Jwt
-    }
+      plugin: Jwt,
+    },
   ]);
 
   server.auth.strategy('forumapi_jwt', 'jwt', {
@@ -36,8 +36,8 @@ const createServer = async (container) => {
       isValid: true,
       credential: {
         id: artifacts.decoded.payload.id
-      }
-    })
+      },
+    }),
   });
 
   await server.register([
@@ -75,12 +75,12 @@ const createServer = async (container) => {
         });
         newResponse.code(translatedError.statusCode);
         return newResponse;
-      }
+      };
 
       // mempertahankan penanganan client error oleh hapi secara native, seperti 404, etc.
       if (!translatedError.isServer) {
         return h.continue;
-      }
+      };
 
       // penanganan server error sesuai kebutuhan
       const newResponse = h.response({
@@ -89,7 +89,7 @@ const createServer = async (container) => {
       });
       newResponse.code(500);
       return newResponse;
-    }
+    };
 
     // jika bukan error, lanjutkan dengan response sebelumnya (tanpa terintervensi)
     return h.continue;

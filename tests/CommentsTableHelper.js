@@ -7,25 +7,25 @@ const CommentsTableTestHelper = {
                     }) {
     const query = {
       text: 'INSERT INTO comments VALUES($1, $2, $3, $4, $5, $6)',
-      values: [id, threadId, owner, content, date, is_delete]
+      values: [id, threadId, owner, content, date, is_delete],
     }
 
-    await pool.query(query)
+    await pool.query(query);
   },
 
   async findCommentsById (id) {
     const query = {
       text: 'SELECT * FROM comments WHERE id = $1',
-      values: [id]
-    }
+      values: [id],
+    };
 
-    const { rows } = await pool.query(query)
+    const { rows } = await pool.query(query);
     return rows;
   },
 
   async cleanTable () {
-    await pool.query('DELETE FROM comments WHERE 1=1')
-  }
+    await pool.query('DELETE FROM comments WHERE 1=1');
+  },
 }
 
 module.exports = CommentsTableTestHelper
