@@ -1,4 +1,4 @@
-class DeleteCommentUseCase {
+class DeleteReplyUseCase {
   constructor({ threadRepository, commentRepository, replyRepository }) {
     this._threadRepository = threadRepository;
     this._commentRepository = commentRepository;
@@ -8,8 +8,8 @@ class DeleteCommentUseCase {
   async execute(useCasePayload) {
     await this._threadRepository.verifyAvailableThread(useCasePayload.thread);
     await this._commentRepository.verifyAvailableComment(useCasePayload.comment, useCasePayload.thread);
-    await this._replyRepository.verifyOwnerReply(useCasePayload.id, useCasePayload.thread, useCasePayload.comment, useCasePayload.owner);
     await this._replyRepository.verifyAvailableReply(useCasePayload.id);
+    await this._replyRepository.verifyReplyOwner(useCasePayload.id, useCasePayload.thread, useCasePayload.comment, useCasePayload.owner);
     await this._replyRepository.deleteReply(useCasePayload.id);
 
     return {
@@ -18,4 +18,4 @@ class DeleteCommentUseCase {
   }
 }
 
-module.exports = DeleteCommentUseCase;
+module.exports = DeleteReplyUseCase;

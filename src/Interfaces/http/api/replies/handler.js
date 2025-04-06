@@ -56,7 +56,6 @@ class RepliesHandler {
   }
 
   async deleteReplyHandler(request, h) {
-    console.log('>> deleteReplyHandler called');
     const deleteReplyUseCase = this._container.getInstance(DeleteReplyUseCase.name);
     const { id: credentialId } = request.auth.credentials;
     const { threadId, commentId, replyId } = request.params;

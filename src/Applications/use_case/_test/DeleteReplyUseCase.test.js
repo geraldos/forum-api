@@ -25,7 +25,7 @@ describe('DeleteReplyUseCase', () => {
       .mockImplementation(() => Promise.resolve());
     mockReplyRepository.verifyAvailableReply = jest.fn()
       .mockImplementation(() => Promise.resolve());
-    mockReplyRepository.verifyOwnerReply = jest.fn()
+    mockReplyRepository.verifyReplyOwner = jest.fn()
       .mockImplementation(() => Promise.resolve());
     mockReplyRepository.deleteReply = jest.fn()
       .mockImplementation(() => Promise.resolve());
@@ -47,7 +47,7 @@ describe('DeleteReplyUseCase', () => {
     expect(mockThreadRepository.verifyAvailableThread).toBeCalledWith(useCasePayload.thread);
     expect(mockCommentRepository.verifyAvailableComment).toBeCalledWith(useCasePayload.comment, useCasePayload.thread);
     expect(mockReplyRepository.verifyAvailableReply).toBeCalledWith(useCasePayload.id);
-    expect(mockReplyRepository.verifyOwnerReply).toBeCalledWith(useCasePayload.id, useCasePayload.thread, useCasePayload.comment, useCasePayload.owner);
+    expect(mockReplyRepository.verifyReplyOwner).toBeCalledWith(useCasePayload.id, useCasePayload.thread, useCasePayload.comment, useCasePayload.owner);
     expect(mockReplyRepository.deleteReply).toBeCalledWith(useCasePayload.id);
   });
 });

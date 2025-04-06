@@ -141,7 +141,7 @@ describe('ReplyRepositoryPostgres', () => {
     });
   });
 
-  describe('verifyOwnerReply function', () => {
+  describe('verifyReplyOwner function', () => {
     it('should not throw error when reply is yours', async () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-1' });
@@ -151,7 +151,7 @@ describe('ReplyRepositoryPostgres', () => {
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
 
       // Action & Assert
-      await expect(replyRepositoryPostgres.verifyOwnerReply('reply-1', 'thread-1', 'comment-1', 'user-1')).resolves.not.toThrowError(AuthorizationError);
+      await expect(replyRepositoryPostgres.verifyReplyOwner('reply-1', 'thread-1', 'comment-1', 'user-1')).resolves.not.toThrowError(AuthorizationError);
     });
 
     it('should throw AuthorizationError when reply is not yours', async () => {
@@ -169,7 +169,7 @@ describe('ReplyRepositoryPostgres', () => {
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
 
       // Action & Assert
-      await expect(replyRepositoryPostgres.verifyOwnerReply('reply-1', 'thread-1', 'comment-1', 'user-1'))
+      await expect(replyRepositoryPostgres.verifyReplyOwner('reply-1', 'thread-1', 'comment-1', 'user-1'))
         .rejects
         .toThrowError(AuthorizationError);
     });

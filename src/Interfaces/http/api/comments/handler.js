@@ -47,7 +47,6 @@ class CommentsHandler {
   }
 
   async deleteCommentHandler(request, h) {
-    console.log('>> deleteCommentHandler called');
     const deleteCommentUseCase = this._container.getInstance(DeleteCommentUseCase.name);
     const { id: credentialId } = request.auth.credentials;
     const { threadId, commentId } = request.params;

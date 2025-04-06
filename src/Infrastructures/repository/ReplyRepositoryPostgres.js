@@ -54,6 +54,17 @@ class ReplyRepositoryPostgres extends ReplyRepository {
     await this._pool.query(query);
   }
 
+  async verifyReplyOwner (replyId, threadId, commentId, owner) {
+    const query = {
+      text: 'SELECT * FROM replies WHERE id=$1 AND thread_id=$2 AND comment_id=$3 AND owner=$4',
+      values: [replyId, threadId, commentId, owner]
+    };
+    const result = await this._pool.query(query);
+    if (!result.rowCount) {
+      throw new AuthorizationError('This reply is not yours');
+    };
+  }
+
   async verifyAvailableReply (replyId) {
     const query = {
       text: 'SELECT id FROM replies WHERE id=$1 AND is_delete=FALSE',
@@ -63,18 +74,6 @@ class ReplyRepositoryPostgres extends ReplyRepository {
 
     if (!result.rowCount) {
       throw new NotFoundError('Reply not found');
-    };
-  }
-
-  async verifyOwnerReply (replyId, threadId, commentId, owner) {
-    const query = {
-      text: 'SELECT * FROM replies WHERE id=$1 AND thread_id=$2 AND comment_id=$3 AND owner=$4',
-      values: [replyId, threadId, commentId, owner]
-    };
-    const result = await this._pool.query(query);
-
-    if (!result.rowCount) {
-      throw new AuthorizationError('This reply is not yours');
     };
   }
 }

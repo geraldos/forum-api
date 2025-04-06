@@ -240,7 +240,7 @@ describe('/threads/{threadId}/comments/{commentId}/replies endpoint', () => {
       const requestPayload = {};
       const threadId = 'thread-1';
       const commentId = 'comment-1';
-      const replyId = 'reply-10';
+      const replyId = 'xxx';
       const server = await createServer(container);
       const { accessToken } = await AuthenticationsTableTestHelper.getAccessToken({ server });
 

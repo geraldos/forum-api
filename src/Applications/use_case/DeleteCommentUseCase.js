@@ -9,7 +9,7 @@ class DeleteCommentUseCase {
     await this._commentRepository.verifyAvailableComment(useCasePayload.comment, useCasePayload.thread);
     await this._commentRepository.verifyOwnerComment(useCasePayload.comment, useCasePayload.owner);
     await this._commentRepository.deleteComment(useCasePayload.comment);
-    console.log('[DeleteCommentUseCase]', useCasePayload);
+
     return {
       status: 'success',
     };
