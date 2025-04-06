@@ -1,15 +1,17 @@
 class DeleteCommentUseCase {
-  constructor({ threadRepository, commentRepository }) {
+  constructor({ threadRepository, commentRepository, replyRepository }) {
     this._threadRepository = threadRepository;
     this._commentRepository = commentRepository;
+    this._replyRepository = replyRepository;
   }
 
   async execute(useCasePayload) {
     await this._threadRepository.verifyAvailableThread(useCasePayload.thread);
     await this._commentRepository.verifyAvailableComment(useCasePayload.comment, useCasePayload.thread);
-    await this._commentRepository.verifyOwnerComment(useCasePayload.comment, useCasePayload.owner);
-    await this._commentRepository.deleteComment(useCasePayload.comment);
-    console.log('[DeleteCommentUseCase]', useCasePayload);
+    await this._replyRepository.verifyOwnerReply(useCasePayload.id, useCasePayload.thread, useCasePayload.comment, useCasePayload.owner);
+    await this._replyRepository.verifyAvailableReply(useCasePayload.id);
+    await this._replyRepository.deleteReply(useCasePayload.id);
+
     return {
       status: 'success',
     };

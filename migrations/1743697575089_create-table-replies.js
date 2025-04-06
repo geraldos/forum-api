@@ -9,6 +9,9 @@ exports.up = pgm => {
     comment_id: {
       type: 'VARCHAR(50)',
     },
+    thread_id: {
+      type: 'VARCHAR(50)',
+    },
     owner: {
       type: 'VARCHAR(30)',
       notNull: true
@@ -20,7 +23,7 @@ exports.up = pgm => {
     date: {
       type: 'TEXT',
     },
-    deleted: {
+    is_delete: {
       type: 'BOOLEAN',
       default: false,
     }

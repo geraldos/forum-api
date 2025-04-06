@@ -16,8 +16,8 @@ class CommentRepositoryPostgres extends CommentRepository {
     const date = new Date();
 
     const query = {
-      text: 'INSERT INTO comments(id, thread_id, content, owner, date) VALUES($1, $2, $3, $4, $5) RETURNING id, thread_id, content, owner, date',
-      values: [id, threadId, content, owner, date],
+      text: 'INSERT INTO comments(id, thread_id, content, owner, date, is_delete) VALUES($1, $2, $3, $4, $5, $6) RETURNING id, thread_id, content, owner, date',
+      values: [id, threadId, content, owner, date, false],
     };
 
     const result = await this._pool.query(query);
@@ -32,19 +32,21 @@ class CommentRepositoryPostgres extends CommentRepository {
     await this._pool.query(query);
   }
 
-  async verifyAvailableComment (commentId) {
+  async verifyAvailableComment(commentId, threadId) {
     const query = {
-      text: 'SELECT id FROM comments WHERE id=$1 AND is_delete=FALSE',
-      values: [commentId]
+      text: 'SELECT * FROM comments WHERE id = $1 AND thread_id = $2 AND is_delete = false',
+      values: [commentId, threadId],
     };
+
     const result = await this._pool.query(query);
 
     if (!result.rowCount) {
-      throw new NotFoundError('Comment not found');
-    };
+      throw new NotFoundError('Komentar tidak ditemukan');
+    }
   }
 
   async verifyOwnerComment (commentId, owner) {
+    console.log('[verifyOwnerComment]', commentId, owner);
     const query = {
       text: 'SELECT * FROM comments WHERE id=$1 AND owner=$2',
       values: [commentId, owner]

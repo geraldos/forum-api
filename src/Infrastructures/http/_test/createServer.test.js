@@ -109,4 +109,30 @@ describe('HTTP server', () => {
     expect(responseJson.status).toEqual('error');
     expect(responseJson.message).toEqual('terjadi kegagalan pada server kami');
   });
+
+  it('should handle server comments error correctly', async () => {
+    // Arrange
+    const threadId = 'thread-1';
+    const commentId = 'comment-1';
+    let server = await createServer(container);
+    await UsersTableTestHelper.addUser({ id: 'user-1', username: 'dicoding-1' });
+    const { accessToken } = await AuthenticationsTableTestHelper.getAccessToken({ server });
+    server = await createServer({});
+
+    // Action
+    const response = await server.inject({
+      method: 'POST',
+      url: `/threads/${threadId}/comments/${commentId}/replies`,
+      payload: { content: 'balasan error' },
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+    });
+
+    // Assert
+    const responseJson = JSON.parse(response.payload);
+    expect(response.statusCode).toEqual(500);
+    expect(responseJson.status).toEqual('error');
+    expect(responseJson.message).toEqual('terjadi kegagalan pada server kami');
+  });
 });

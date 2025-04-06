@@ -3,6 +3,7 @@ const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const AuthenticationsTableTestHelper = require('../../../../tests/AuthenticationsTableTestHelper');
 const CommentsTableTestHelper = require('../../../../tests/CommentsTableHelper');
+const RepliesTableTestHelper = require('../../../../tests/RepliesTableHelper');
 const container = require('../../container');
 const createServer = require('../createServer');
 
@@ -12,6 +13,8 @@ describe('/threads endpoint', () => {
   });
 
   afterEach(async () => {
+    await RepliesTableTestHelper.cleanTable();
+    await CommentsTableTestHelper.cleanTable();
     await UsersTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
     await AuthenticationsTableTestHelper.cleanTable();
@@ -165,6 +168,13 @@ describe('/threads endpoint', () => {
         content: 'thread ini bagus',
         owner: 'user-1',
       });
+      await RepliesTableTestHelper.addReplies({
+        id: 'reply-1',
+        commentId: 'comment-1',
+        threadId: 'thread-1',
+        owner: 'user-1',
+        content: 'komentar ini bagus',
+      })
       const threadId = 'thread-1';
       const server = await createServer(container);
 
@@ -185,6 +195,7 @@ describe('/threads endpoint', () => {
       expect(thread.body).toEqual('body');
       expect(thread.username).toEqual('dicoding');
       expect(Array.isArray(thread.comments)).toBe(true);
+      expect(Array.isArray(thread.comments[0].replies)).toBe(true);
       expect(thread.comments[0].content).toEqual('thread ini bagus');
     });
 

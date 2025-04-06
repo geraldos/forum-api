@@ -9,6 +9,12 @@ const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 
 describe('CommentRepositoryPostgres', () => {
+  beforeEach(async () => {
+    await CommentsTableTestHelper.cleanTable();
+    await UsersTableTestHelper.cleanTable();
+    await ThreadsTableTestHelper.cleanTable();
+  });
+
   afterEach(async () => {
     await CommentsTableTestHelper.cleanTable();
     await UsersTableTestHelper.cleanTable();
@@ -83,7 +89,7 @@ describe('CommentRepositoryPostgres', () => {
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
       // Action & Assert
-      await expect(commentRepositoryPostgres.verifyAvailableComment('comment-1')).resolves.not.toThrowError(NotFoundError);
+      await expect(commentRepositoryPostgres.verifyAvailableComment('comment-1', 'thread-1')).resolves.not.toThrowError(NotFoundError);
     });
 
     it('should throw NotFoundError when comment is not available', async () => {
@@ -91,7 +97,7 @@ describe('CommentRepositoryPostgres', () => {
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
       // Action & Assert
-      await expect(commentRepositoryPostgres.verifyAvailableComment('comment-1')).rejects.toThrowError(NotFoundError);
+      await expect(commentRepositoryPostgres.verifyAvailableComment('comment-1', 'thread-1')).rejects.toThrowError(NotFoundError);
     });
   });
 
