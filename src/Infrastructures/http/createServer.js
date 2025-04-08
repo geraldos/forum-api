@@ -7,16 +7,13 @@ const authentications = require('../../Interfaces/http/api/authentications');
 const threads = require('../../Interfaces/http/api/threads');
 const comments = require('../../Interfaces/http/api/comments');
 const replies = require('../../Interfaces/http/api/replies');
+const config = require('../../Commons/config');
 
 const createServer = async (container) => {
   const server = Hapi.server({
-    host: process.env.HOST,
-    port: process.env.PORT,
-    routes: {
-      cors: {
-        origin: ['*']
-      },
-    },
+    port: config.app.port,
+    host: config.app.host,
+    debug: config.app.debug,
   });
 
   await server.register([
