@@ -217,4 +217,91 @@ describe('/threads/{threadId}/comments endpoint', () => {
       expect(responseJson.status).toEqual('fail');
     });
   });
+
+  describe('when PUT /threads/{threadId}/comments/{commentId}/likes', () => {
+    it('should response 200 and liked comment', async () => {
+      // Arrange
+
+      const requestPayload = {};
+      const threadId = 'thread-1';
+      const commentId = 'comment-1';
+      // eslint-disable-next-line no-undef
+      const server = await createServer(container);
+      const { accessToken, id } = await AuthenticationsTableTestHelper.getAccessToken({ server });
+
+      await ThreadsTableTestHelper.addThread({ id: threadId, owner: id, body: 'alpha' });
+      await CommentsTableTestHelper.addComment({ id: commentId, threadId, owner: id, content: 'thread ini bagus' });
+
+      // Action
+      const response = await server.inject({
+        method: 'PUT',
+        url: `/threads/${threadId}/comments/${commentId}/likes`,
+        payload: requestPayload,
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+      });
+
+      await UsersTableTestHelper.findUsersById(id);
+      await ThreadsTableTestHelper.findThreadsById(threadId);
+      await CommentsTableTestHelper.findCommentsById(commentId);
+
+      // Assert
+      const responseJson = JSON.parse(response.payload);
+
+      expect(response.statusCode).toEqual(200);
+      expect(responseJson.status).toEqual('success');
+    });
+
+    it('should response 400 when like comment from unavailable thread', async () => {
+      // Arrange
+      const requestPayload = {};
+      const threadId = 'xxx';
+      const commentId = 'comment-1';
+      const server = await createServer(container);
+      const { accessToken, id } = await AuthenticationsTableTestHelper.getAccessToken({ server });
+
+      await ThreadsTableTestHelper.addThread({ id: 'thread-1', owner: id, body: 'alpha' });
+      await CommentsTableTestHelper.addComment({ id: commentId, owner: id, content: 'thread ini bagus' });
+
+      // Action
+      const response = await server.inject({
+        method: 'PUT',
+        url: `/threads/${threadId}/comments/${commentId}/likes`,
+        payload: requestPayload,
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+      });
+
+      // Assert
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(404);
+      expect(responseJson.status).toEqual('fail');
+    });
+
+    it('should response 404 when like comment from unavailable comment', async () => {
+      // Arrange
+      const requestPayload = {};
+      const threadId = 'thread-1';
+      const commentId = 'comment-10';
+      const server = await createServer(container);
+      const { accessToken } = await AuthenticationsTableTestHelper.getAccessToken({ server });
+
+      // Action
+      const response = await server.inject({
+        method: 'PUT',
+        url: `/threads/${threadId}/comments/${commentId}/likes`,
+        payload: requestPayload,
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+      });
+
+      // Assert
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(404);
+      expect(responseJson.status).toEqual('fail');
+    });
+  });
 });

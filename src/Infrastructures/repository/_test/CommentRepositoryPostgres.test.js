@@ -151,6 +151,59 @@ describe('CommentRepositoryPostgres', () => {
       expect(getCommentByThreadId[0]).toHaveProperty('username');
       expect(getCommentByThreadId[0]).toHaveProperty('date');
       expect(getCommentByThreadId[0]).toHaveProperty('content');
+      expect(getCommentByThreadId[0]).toHaveProperty('likeCount');
+    });
+  });
+
+  describe('like function', () => {
+    it('should persist liked comment', async () => {
+      // Arrange
+      const commentId = 'comment-1';
+      const fakeIdGenerator = () => '1';
+
+      await UsersTableTestHelper.addUser({ id: 'user-1', username: 'dicoding' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-1' });
+      await CommentsTableTestHelper.addComment({
+        id: commentId,
+        thread: 'thread-1',
+        owner: 'user-1',
+        content: 'thread ini bagus',
+      });
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator);
+
+      // Action
+      await commentRepositoryPostgres.likeComment(commentId, 'user-1');
+
+      // Assert
+      const comments = await CommentsTableTestHelper.findCommentsById('comment-1');
+      expect(comments[0].likeCount).toEqual(1);
+    });
+
+    it('should persist unliked comment', async () => {
+      // Arrange
+      const commentId = 'comment-1';
+      const fakeIdGenerator = () => '1';
+
+      await UsersTableTestHelper.addUser({ id: 'user-1', username: 'dicoding' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-1' });
+      await CommentsTableTestHelper.addComment({
+        id: commentId,
+        thread: 'thread-1',
+        owner: 'user-1',
+        content: 'thread ini bagus',
+      });
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator);
+
+      // Action
+      await commentRepositoryPostgres.likeComment(commentId, 'user-1'); // like comment
+      await commentRepositoryPostgres.likeComment(commentId, 'user-1'); // unlike comment
+
+      // Assert
+      const comments = await CommentsTableTestHelper.findCommentsById('comment-1');
+      console.log(comments);
+      expect(comments[0].likeCount).toEqual(0);
     });
   });
 });

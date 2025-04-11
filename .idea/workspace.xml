@@ -4,7 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="54e52adb-4eed-46ef-818f-f4c079b17d15" name="Changes" comment="delete reply with all testing, all done" />
+    <list default="true" id="54e52adb-4eed-46ef-818f-f4c079b17d15" name="Changes" comment="add feature like comments">
+      <change afterPath="$PROJECT_DIR$/src/Applications/use_case/LikeCommentUseCase.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Applications/use_case/_test/LikeCommentUseCase.test.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/1743697344189_create-table-comments.js" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/1743697344189_create-table-comments.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Applications/use_case/_test/DeleteCommentUseCase.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Applications/use_case/_test/DeleteCommentUseCase.test.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Domains/comments/CommentRepository.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domains/comments/CommentRepository.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Domains/comments/_test/CommentRepository.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domains/comments/_test/CommentRepository.test.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Infrastructures/container.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructures/container.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Infrastructures/http/_test/comments.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructures/http/_test/comments.test.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Infrastructures/repository/CommentRepositoryPostgres.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructures/repository/CommentRepositoryPostgres.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Infrastructures/repository/_test/CommentRepositoryPostgres.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructures/repository/_test/CommentRepositoryPostgres.test.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Interfaces/http/api/comments/handler.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Interfaces/http/api/comments/handler.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Interfaces/http/api/comments/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Interfaces/http/api/comments/routes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/CommentsTableHelper.js" beforeDir="false" afterPath="$PROJECT_DIR$/tests/CommentsTableHelper.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,6 +33,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -36,6 +56,7 @@
   &quot;associatedIndex&quot;: 0
 }</component>
   <component name="ProjectId" id="2vE3V7rtIV3kUwnC4S9Lgk3LirH" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -44,7 +65,7 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/like-comment&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/geraldosepdwijaya/Documents/DicodingAcademy/NewBEDev/forum-api-starter-project&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -166,6 +187,8 @@
       <workItem from="1743740916992" duration="21203000" />
       <workItem from="1743825701029" duration="31882000" />
       <workItem from="1743918772195" duration="25017000" />
+      <workItem from="1744174773169" duration="3583000" />
+      <workItem from="1744294903147" duration="9527000" />
     </task>
     <task id="LOCAL-00001" summary="done add comment with check available threads and fix some test for thread">
       <option name="closed" value="true" />
@@ -207,7 +230,63 @@
       <option name="project" value="LOCAL" />
       <updated>1743942260917</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="delete cd file">
+      <option name="closed" value="true" />
+      <created>1744134359524</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1744134359524</updated>
+    </task>
+    <task id="LOCAL-00007" summary="add feature hello world">
+      <option name="closed" value="true" />
+      <created>1744134411343</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1744134411343</updated>
+    </task>
+    <task id="LOCAL-00008" summary="add feature hello world">
+      <option name="closed" value="true" />
+      <created>1744134531253</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1744134531253</updated>
+    </task>
+    <task id="LOCAL-00009" summary="add feature hello world with all test!">
+      <option name="closed" value="true" />
+      <created>1744134702552</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1744134702552</updated>
+    </task>
+    <task id="LOCAL-00010" summary="add feature hello world with all test!">
+      <option name="closed" value="true" />
+      <created>1744135088429</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1744135088429</updated>
+    </task>
+    <task id="LOCAL-00011" summary="add feature hello world with all test!">
+      <option name="closed" value="true" />
+      <created>1744135117656</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1744135117656</updated>
+    </task>
+    <task id="LOCAL-00012" summary="edit cd file">
+      <option name="closed" value="true" />
+      <created>1744135203580</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1744135203580</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -219,6 +298,11 @@
     <MESSAGE value="done get detail thread by id with get comment by thread id" />
     <MESSAGE value="delete reply temp" />
     <MESSAGE value="delete reply with all testing, all done" />
-    <option name="LAST_COMMIT_MESSAGE" value="delete reply with all testing, all done" />
+    <MESSAGE value="delete cd file" />
+    <MESSAGE value="add feature hello world" />
+    <MESSAGE value="add feature hello world with all test!" />
+    <MESSAGE value="edit cd file" />
+    <MESSAGE value="add feature like comments" />
+    <option name="LAST_COMMIT_MESSAGE" value="add feature like comments" />
   </component>
 </project>

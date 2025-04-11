@@ -1,5 +1,6 @@
 const AddCommentUseCase = require('../../../../Applications/use_case/AddCommentUseCase');
 const DeleteCommentUseCase = require('../../../../Applications/use_case/DeleteCommentUseCase');
+const LikeCommentUseCase = require('../../../../Applications/use_case/LikeCommentUseCase');
 const DomainErrorTranslator = require("../../../../Commons/exceptions/DomainErrorTranslator");
 const ClientError = require("../../../../Commons/exceptions/ClientError");
 
@@ -52,6 +53,24 @@ class CommentsHandler {
     const { threadId, commentId } = request.params;
 
     await deleteCommentUseCase.execute({
+      comment: commentId,
+      thread: threadId,
+      owner: credentialId,
+    });
+
+    const response = h.response({
+      status: 'success',
+    });
+    response.code(200);
+    return response;
+  }
+
+  async likeCommentHandler(request, h) {
+    const likeCommentUseCase = this._container.getInstance(LikeCommentUseCase.name);
+    const { id: credentialId } = request.auth.credentials;
+    const { threadId, commentId } = request.params;
+
+    await likeCommentUseCase.execute({
       comment: commentId,
       thread: threadId,
       owner: credentialId,

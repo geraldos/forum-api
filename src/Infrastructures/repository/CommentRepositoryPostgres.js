@@ -16,8 +16,8 @@ class CommentRepositoryPostgres extends CommentRepository {
     const date = new Date();
 
     const query = {
-      text: 'INSERT INTO comments(id, thread_id, content, owner, date, is_delete) VALUES($1, $2, $3, $4, $5, $6) RETURNING id, thread_id, content, owner, date',
-      values: [id, threadId, content, owner, date, false],
+      text: 'INSERT INTO comments(id, thread_id, content, owner, date, is_delete, like_count , liked_by) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id, thread_id, content, owner, date, is_delete, like_count AS "likeCount"',
+      values: [id, threadId, content, owner, date, false, 0, '{}'],
     };
 
     const result = await this._pool.query(query);
@@ -65,7 +65,8 @@ class CommentRepositoryPostgres extends CommentRepository {
                  users.username,
                  comments.date,
                  comments.content,
-                 comments.is_delete
+                 comments.is_delete,
+                 comments.like_count AS "likeCount"
              FROM comments
                       JOIN users ON users.id = comments.owner
              WHERE comments.thread_id = $1
@@ -74,6 +75,30 @@ class CommentRepositoryPostgres extends CommentRepository {
     }
     const result = await this._pool.query(query);
     return result.rows;
+  }
+
+  async likeComment (commentId, userId) {
+    const query = {
+      text: `
+          UPDATE comments
+          SET
+              liked_by =
+                  CASE
+                      WHEN $2 = ANY(liked_by) THEN array_remove(liked_by, $2)
+                      ELSE array_append(liked_by, $2)
+                      END,
+              like_count =
+                  CASE
+                      WHEN $2 = ANY(liked_by) THEN like_count - 1
+                      ELSE like_count + 1
+                      END
+          WHERE id = $1
+              RETURNING like_count, liked_by
+    `,
+      values: [commentId, userId],
+    };
+    const result = await this._pool.query(query);
+    return result.rows[0];
   }
 }
 

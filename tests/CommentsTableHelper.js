@@ -19,7 +19,13 @@ const CommentsTableTestHelper = {
 
   async findCommentsById (id) {
     const query = {
-      text: 'SELECT * FROM comments WHERE id = $1',
+      text: `SELECT 
+        comments.id,
+        comments.date,
+        comments.content,
+        comments.is_delete,
+        comments.like_count AS "likeCount"
+        FROM comments WHERE id = $1`,
       values: [id],
     };
 
