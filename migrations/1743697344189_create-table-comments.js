@@ -22,8 +22,15 @@ exports.up = (pgm) => {
     is_delete: {
       type: 'BOOLEAN',
       default: false,
-
-    }
+    },
+    like_count: {
+      type: 'INTEGER',
+      default: 0,
+    },
+    liked_by: {
+      type: 'TEXT[]',
+      default: pgm.func('ARRAY[]::TEXT[]'), // default empty array
+    },
   })
 }
 

@@ -1,9 +1,9 @@
 const CommentRepository = require('../../../Domains/comments/CommentRepository');
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
-const DeleteCommentUseCase = require('../DeleteCommentUseCase');
+const LikeCommentUseCase = require('../LikeCommentUseCase');
 
-describe('DeleteCommentUseCase', () => {
-  it('should orchestrating the delete comments action correctly', async () => {
+describe('LikeCommentUseCase', () => {
+  it('should orchestrating the like comments action correctly', async () => {
     // Arrange
     const useCasePayload = {
       comment: 'comment-1',
@@ -20,27 +20,24 @@ describe('DeleteCommentUseCase', () => {
       .mockImplementation(() => Promise.resolve());
     mockCommentRepository.verifyAvailableComment = jest.fn()
       .mockImplementation(() => Promise.resolve());
-    mockCommentRepository.verifyOwnerComment = jest.fn()
-      .mockImplementation(() => Promise.resolve());
-    mockCommentRepository.deleteComment = jest.fn()
+    mockCommentRepository.likeComment = jest.fn()
       .mockImplementation(() => Promise.resolve());
 
     /** creating use case instance */
-    const getCommentUseCase = new DeleteCommentUseCase({
+    const getCommentUseCase = new LikeCommentUseCase({
       threadRepository: mockThreadRepository,
       commentRepository: mockCommentRepository,
     });
 
     // Action
-    const deletedComment = await getCommentUseCase.execute(useCasePayload);
+    const likeComment = await getCommentUseCase.execute(useCasePayload);
 
     // Assert
-    expect(deletedComment).toStrictEqual({
+    expect(likeComment).toStrictEqual({
       status: 'success',
     });
     expect(mockThreadRepository.verifyAvailableThread).toBeCalledWith(useCasePayload.thread);
     expect(mockCommentRepository.verifyAvailableComment).toBeCalledWith(useCasePayload.comment, useCasePayload.thread);
-    expect(mockCommentRepository.verifyOwnerComment).toBeCalledWith(useCasePayload.comment, useCasePayload.owner);
-    expect(mockCommentRepository.deleteComment).toBeCalledWith(useCasePayload.comment);
+    expect(mockCommentRepository.likeComment).toBeCalledWith(useCasePayload.comment, useCasePayload.owner);
   });
 });
