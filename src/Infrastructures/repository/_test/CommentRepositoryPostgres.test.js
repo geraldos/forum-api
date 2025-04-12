@@ -202,7 +202,6 @@ describe('CommentRepositoryPostgres', () => {
 
       // Assert
       const comments = await CommentsTableTestHelper.findCommentsById('comment-1');
-      console.log(comments);
       expect(comments[0].likeCount).toEqual(0);
     });
   });
